@@ -1,0 +1,38 @@
+{% extends 'App_Blog/base.html' %}
+{% load custom_filters %}
+{% block page_title %}
+    Organic Blogger | Search Result
+{% endblock %}
+
+{% block body_content %}
+<div class="container" style="padding-top:20px; margin-top: 50px;">
+    {% if empty_search %}
+    <!--<h3>Results related to your search: "{{searched_item}}" </h3>-->
+    <div class="alert alert-warning">
+        Please! Type something to search...
+    </div>
+    {% else %}
+    <h3>Results related to your search: "{{searched_item}}" </h3>
+        
+    {% for user in search_result %}
+    <div class="row" style="margin-top: 20px;">
+        <div class="col-sm-2">
+            {% if user.user_profile.profile_pic %}
+            <img src="/media/{{user.user_profile.profile_pic}}" class="rounded-circle" width="50px" style="margin-left: 20px">
+            {% else %}
+            <img src="/media/profile_pics/Default-Profile-Picture.png" class="rounded-circle" width="50px" style="margin-left: 20px">
+            {% endif %}
+        </div>
+
+        <div class="col-sm-10">
+            <a href="{% url 'other_user' username=user.username %}"><h5 style="margin-left: -10%;">{{ user.username }}</h5></a>
+            <p style="margin-left: -10%; margin-top: -8px; color: #669;">{{user.first_name}} {{user.last_name}}</p>
+        </div>
+        
+    </div>
+     
+    {% endfor %}
+
+    {% endif %}
+</div>
+{% endblock %}

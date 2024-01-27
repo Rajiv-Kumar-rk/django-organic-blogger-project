@@ -1,0 +1,23 @@
+{% extends 'App_Blog/base.html' %}
+{% load crispy_forms_tags %}
+{% block page_title %}
+    Organic Blogger | Add Profile Pcture
+{% endblock %}
+
+{% block body_content %}
+<div class="container" style="padding-top:20px; margin-top: 50px;">
+    {% if profile_pic_added %}
+    <div class="alert alert-success">
+        Profile Picture Changed Successfully! <a href="{% url 'profile' %}">Go To Profile</a>
+    </div>
+    {% else %}
+    <h1>Add Profile Picture</h1>
+ 
+    <form action="{% url 'add_profile_picture' %}" method="post" enctype="multipart/form-data">
+        {{form|crispy}}
+        {% csrf_token %} <br>
+        <button type="submit" class="btn btn-primary btn-sm">Add Picture</button>
+    </form>
+    {% endif %}
+</div>
+{% endblock %}

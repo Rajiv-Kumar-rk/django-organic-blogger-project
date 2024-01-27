@@ -1,0 +1,34 @@
+{% extends 'App_Blog/base.html' %}
+{% load custom_filters %}
+{% block page_title %}
+    Organic Blogger | Home
+{% endblock %}
+
+{% block navbar_menu_tab_for_home %} 
+ active
+{% endblock %}
+
+{% block body_content %}
+<div class="container" style="padding-top:20px; margin-top: 50px;">
+
+    {% for blog in blogs %}
+    <h2>{{ blog.title }}</h2>
+    <h6><i>{{ blog.publish_date }}</i></h6>
+
+    <div class="row">
+        <div class="col-sm-4" style="padding-top: 20px;">  
+            <img src="/media/{{ blog.image }}" alt="{{ blog.title }}" title="{{ blog.title }}" width="100%">
+        </div>
+
+        <div class="col-sm-8">
+            <p>{{ blog.content|content_range_filter|linebreaks }} <a href="{% url 'blog_details' slug=blog.slug %}">Read More</a></p>
+            <h6>Posted By: <a href="{% url 'other_user' username=blog.author %}">{{ blog.author }}</a></h6>
+            <h6>{{ blog.like_on_blog.count }} Likes | {{ blog.comment_on_blog.count }} Comments</h6>
+            <!--<a href="#" class="btn btn-success btn-sm" style="margin-top: -5px;">Share</a>-->
+        </div>
+    </div>
+    <hr>
+    {% endfor %} 
+
+</div>
+{% endblock %}

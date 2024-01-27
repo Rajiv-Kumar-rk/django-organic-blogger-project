@@ -1,0 +1,29 @@
+{% extends 'App_Blog/base.html' %}
+{% load crispy_forms_tags %}
+{% block page_title %}
+    Organic Blogger | Create Blog
+{% endblock %}
+
+{% block navbar_menu_tab_for_create_blog %} 
+ active
+{% endblock %}
+
+{% block body_content %}
+<div class="container" style="padding-top:20px; margin-top: 50px;">
+    {% if blog_created %}
+    <div class="alert alert-success">
+        Blog Published Successfully! <a href="{% url 'my_blogs' %}">Go To My Blogs</a> 
+    </div>
+    {% else %}
+    <h1>Create New Blog</h1>
+    <form action="{% url 'create_blog' %}" method="post" enctype="multipart/form-data">
+        {{form|crispy}}
+        {% csrf_token %}
+        <br>
+        <button type="submit" class="btn btn-primary btn-sm">Publish</button>
+        <br>
+    </form>
+    {% endif %}
+</div>
+<br><br>
+{% endblock %}

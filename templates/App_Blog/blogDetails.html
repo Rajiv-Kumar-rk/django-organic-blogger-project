@@ -1,0 +1,64 @@
+{% extends 'App_Blog/base.html' %}
+{% load crispy_forms_tags %}
+{% block page_title %}
+    Organic Blogger | Blog Details
+{% endblock %}
+
+{% block navbar_menu_tab %} 
+ active
+{% endblock %}
+
+{% block body_content %}
+<div class="container" style="padding-top:20px; margin-top: 50px;">
+    <div class="row" style="padding-top: 10px;">
+        <div class="col-sm-6">
+            <h2>{{ blog.title }}</h2>
+            <h4>Posted By: <a href="{% url 'other_user' username=blog.author %}">{{ blog.author }}</a></h4>
+            <i><h6>Published On: {{ blog.publish_date }}</h6></i>
+            <i><h6>Updated On: {{ blog.update_date}}</h6></i>
+            <h6>{{ blog.like_on_blog.count }} Likes | {{ blog.comment_on_blog.count }} Comments</h6>
+        </div>
+
+        <div class="col-sm-6">
+            <img src="/media/{{ blog.image }}" alt="{{ blog.title }}" title="{{ blog.title }}" width="100%">
+        </div>
+
+        {{ blog.content|linebreaks }}
+    </div>
+    <hr>
+    <h3>
+        {% if is_blog_liked %}
+        <a href="{% url 'dislike_blog' pk=blog.pk %}">
+            <i class="fa-regular fa-thumbs-down" style=" color: blue;"></i>
+        </a>
+        {% else %}
+        <a href="{% url 'like_blog' pk=blog.pk %}">
+            <i class="fa-regular fa-thumbs-up" style=" color: blue;"></i>
+        </a>
+        {% endif %}
+    </h3>
+    
+    <div class="row">
+        <div class="col-sm-6">
+            <h5>Comments: </h5>
+            {% for comment in blog.comment_on_blog.all %}
+            <p><a href="#">{{ comment.user }}</a>: {{ comment.comment }}
+            <br>
+            <i>{{ comment.comment_date }}</i>
+            </p>
+            
+            {% endfor %}
+        </div>
+        <div class="col-sm-6">
+            <form action="{% url 'blog_details' slug=blog.slug %}" method="post">
+                {{ comment_form|crispy }}
+                {% csrf_token %}
+                <br>
+                <button type="submit" class="btn btn-primary btn-sm">Comment</button>
+            </form>
+        </div>
+    </div>
+    <br><br><br>
+</div>
+    
+{% endblock %}

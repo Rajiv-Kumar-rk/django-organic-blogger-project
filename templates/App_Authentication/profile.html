@@ -1,0 +1,249 @@
+{% extends 'App_Blog/base.html' %}
+{% load crispy_forms_tags %}
+{% load custom_filters %}
+{% block page_title %}
+    Organic Blogger | Profile
+{% endblock %}
+
+{% block navbar_menu_tab_for_profile %} 
+ active
+{% endblock %}
+
+{% block css_block %}
+<style>
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,body{
+width: 100%;
+overflow-x: hidden;
+}
+
+.row{
+    margin: 0px 0px;
+}
+
+.card{
+    width: 360px;
+    padding: 0px 12px;
+    margin: 10px 5px;
+    border: none;
+}
+
+.single-blog{
+    box-shadow: 0px 0px 20px 1px rgba(0,0,0,.2);
+    padding: 10px;
+    background-color: #fff;
+}
+/*
+.copy-blog-link{
+    position: relative;
+    padding: 10px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    display: flex;
+}
+
+.copy-blog-link input.blog-link{
+    padding: 10px;
+    font-size: 18px;
+    color: #555;
+    border: none;
+    outline: none;
+}
+
+.copy-blog-link button{
+    padding: 10px;
+    background: #5784f5;
+    color: #fff;
+    font-size: 18px;
+    border: none;
+    outline: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.copy-blog-link button:active{
+    background: #809ce2;
+}
+
+
+.copy-blog-link button:before{
+    content: "Copied";
+    position: absolute;
+    top: 40px;
+    right: 220px;
+    background: #fff;
+    padding: 8px 10px;
+    border-color: #007bff;
+    border-radius: 20px;
+    font-size: 15px;
+    display: none;
+}
+
+.copy-blog-link button:after{
+    content: "";
+    position: absolute;
+    top: 40px;
+    right: 25px;
+    width: 10px;
+    height: 10px;
+    background: #fff;
+    padding: 8px 10px;
+    transform: rotate(45deg);
+    display: none;
+}
+
+.copy-blog-link.active button:before,
+.copy-blog-link.active button:after{
+    display: block;
+}
+*/
+
+.single-blog img{
+    width: 100%;
+}
+
+.blog-meta{
+    font-size: 14px;
+    margin-bottom: 2px;
+}
+
+.single-blog span{
+    float: right;
+    font-size: 16px;
+    color: cornflowerblue;
+}
+
+.blog-text{
+    font-size: 14px;
+    text-align: justify;
+}
+
+.single-blog h2{
+    margin-top: 10px;
+    font-size: 16px;
+    color: #007bff;
+}
+
+.single-blog h2 a{
+   text-decoration: none;
+}
+
+.read-more-btn{
+    background-image: linear-gradient(to right,#1c03b5,#5c8bef);
+    padding: 5px 12px 8px;
+    border-radius: 20px;
+    line-height: 20px;
+    font-size: 14px;
+    color: #fff;
+    text-decoration: none;
+    border: none !important;
+}
+
+.read-more-btn:hover{
+    background-image: linear-gradient(to right,#006417,#00b128);
+    text-decoration: none;
+    color: #fff;
+}
+</style>
+{% endblock %}
+
+{% block body_content %}
+<div class="container" style="padding-top:20px; margin-top: 50px;">
+    
+    <div class="row">
+        <div class="col-sm-4">
+            <center>
+                {% if user.user_profile.profile_pic %}
+                <img src="/media/{{user.user_profile.profile_pic}}" class="rounded-circle" width="140px">
+                <br><br>
+                <a href="{% url 'change_profile_picture' %}" class="btn btn-info btn-sm">Change Profile Picture</a>
+                <br>
+                {% else %}
+                <img src="/media/profile_pics/Default-Profile-Picture.png" class="rounded-circle" width="140px">
+                <br><br>
+                <a href="{% url 'add_profile_picture' %}" class="btn btn-info btn-sm">Add Profile Picture</a>
+                <br>
+                {% endif %}
+            </center>
+            
+        </div>
+        
+        <div class="col-sm-8">
+            <h3>{{ user.username }} 
+                {% if user.user_profile.discription and user.first_name and user.last_name %}
+                <a href="{% url 'update_profile' %}" class="btn btn-light btn-sm">Edit Profile</a> 
+                {% else %}
+                <a href="{% url 'update_profile' %}" class="btn btn-warning btn-sm">Complete Profile</a> 
+                {% endif %}
+                <a href="{% url 'change_password' %}" class="btn btn-info btn-sm">Change Password</a>
+                <a href="{% url 'create_blog' %}" class="btn btn-primary btn-sm">Create Blog</a>
+            </h3>
+            <h4>{{ user.blog_author.count }} Blogs &nbsp;&nbsp; 
+                {{ user.following.count }} Followers &nbsp;&nbsp; 
+                {{ user.follower.count }} Following &nbsp;&nbsp; 
+            </h4>
+            <br>
+            <h3>{{user.first_name}} {{user.last_name}}</h3>
+            <h6>{{user.user_profile.discription}}</h6>
+            {% if user.user_profile.instagram_profile_link or user.user_profile.facebook_profile_link or user.user_profile.twitter_profile_link or user.user_profile.linkedin_profile_link %}
+            <h5>Follow me on: 
+                 {% if user.user_profile.instagram_profile_link %}
+                 <a href="{{ user.user_profile.instagram_profile_link }}" target="_blank"><i class="fa-brands fa-instagram" title="Instagram"></i></a>
+                 {% endif %}
+
+                 {% if user.user_profile.facebook_profile_link %}
+                 <a href="{{ user.user_profile.facebook_profile_link }}" target="_blank"><i class="fa-brands fa-square-facebook" title="Facebook"></i></a> 
+                 {% endif %}
+
+                 {% if user.user_profile.twitter_profile_link %}
+                 <a href="{{ user.user_profile.twitter_profile_link }}" target="_blank"><i class="fa-brands fa-square-twitter" title="Twitter"></i></a> 
+                 {% endif %}
+
+                 {% if user.user_profile.linkedin_profile_link %}
+                 <a href="{{ user.user_profile.linkedin_profile_link }}" target="_blank"><i class="fa-brands fa-linkedin" title="LinkedIn"></i></a>
+                 {% endif %}
+            </h5>
+            {% endif %}
+        </div>
+    </div> 
+
+    <hr>
+
+        <div class="row">
+            {% for blog in blogs %}
+            <div class="col-md-4" style="margin-top: 20px;">
+                <div class="single-blog">
+                    <p class="bolg-meta" style="display: inline;"><a href="{% url 'edit_blog' pk=blog.pk %}"><i class="fa-solid fa-pen-to-square"  title="Edit"></i></a> | 
+                        <form action="{% url 'delete_blog' pk=blog.pk %}" style="display: inline;" method="post" onsubmit="return confirm('Are You Sure, You Want To Delete This Blog?')">
+                            <button type="submit" style="border: none; background: none;"><i class="fa-solid fa-trash-can" title="Delete" style="color: #0d6efd; "></i></button>
+                            {% csrf_token %}
+                        </form>
+                        <!--
+                        | 
+                        
+                        <div class="copy-blog-link" style="display: inline; background: none;">
+                            <input type="hidden" class="blog-link" value="https://www.instagram.com/">
+                            <button style="background: none; border: none; color: #0d6efd;"><i class="fa-solid fa-link" title="Copy Link" ></i></button>
+                        </div>
+                        <a href="#"><i class="fa-solid fa-link" title="Copy Link"></i></a> --><span>{{ blog.publish_date|date }}</span>
+                    </p>
+                    <img src="/media/{{ blog.image }}" alt="{{ blog.title }}">
+                    <h2><a href="{% url 'blog_details' slug=blog.slug %}">{{ blog.title }}</a></h2>
+                    <p class="blog-text">{{ blog.content|card_content_range_filter|linebreaks }}</p>
+                    <p><a href="{% url 'blog_details' slug=blog.slug %}" class="read-more-btn">Read More</a>
+                    <span>{{ blog.like_on_blog.count }} Likes | {{ blog.comment_on_blog.count }} Comments</span>
+                    </p>
+                </div>
+            </div> 
+            {% endfor %}
+        </div>
+    
+</div>
+<br>
+{% endblock %}

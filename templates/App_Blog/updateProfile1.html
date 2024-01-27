@@ -1,0 +1,23 @@
+{% extends 'App_Blog/base.html' %}
+{% load crispy_forms_tags %}
+{% block page_title %}
+    Organic Blogger | Update Profile
+{% endblock %}
+
+{% block body_content %}
+<div class="container" style="padding-top:20px;">
+    {% if profile_updated %}
+    <div class="alert alert-success">
+        Profile Updated Successfully! <a href="{% url 'profile' %}">Go To Profile</a>
+    </div>
+    {% else %}
+    <h1>Update Profile Page</h1>
+    
+    <form action="{% url 'update_profile' %}" method="post">
+        {{form|crispy}}
+        {% csrf_token %} <br>
+        <button type="submit" class="btn btn-primary btn-sm">Update</button>
+    </form>
+    {% endif %}
+</div>
+{% endblock %}

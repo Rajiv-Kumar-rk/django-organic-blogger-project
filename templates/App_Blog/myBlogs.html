@@ -1,0 +1,42 @@
+{% extends 'App_Blog/base.html' %}
+{% load custom_filters %}
+{% block page_title %}
+    Organic Blogger | My Blogs
+{% endblock %}
+
+{% block navbar_menu_tab_for_myblogs %} 
+ active
+{% endblock %}
+
+{% block body_content %}
+<div class="container" style="padding-top:20px; margin-top: 50px;">
+    {% for blog in user.blog_author.all %}
+    <h2>{{ blog.title }}</h2>
+    <h6><i>{{ blog.publish_date }}</i></h6>
+
+    <div class="row">
+        <div class="col-sm-4" style="padding-top: 20px;">  
+            <img src="/media/{{ blog.image }}" alt="{{ blog.title }}" title="{{ blog.title }}" width="100%">
+
+            
+        </div>
+        <div class="col-sm-8">
+            <p>{{ blog.content|content_range_filter|linebreaks }} <a href="/blog-details/{{ blog.slug }}">Read More</a></p>
+            <h6 style="margin-top: 40px;">{{ blog.like_on_blog.count }} Likes | {{ blog.comment_on_blog.count }} Comments
+                <div style="float: right;">
+                <a href="{% url 'edit_blog' pk=blog.pk %}" class="btn btn-info btn-sm" style="margin-top: 0px;">Edit</a>
+                
+                <form action="{% url 'delete_blog' pk=blog.pk %}" style="display: inline;" method="post" onsubmit="return confirm('Are You Sure, You Want To Delete This Blog?')">
+                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    {% csrf_token %}
+                </form>
+                
+                <!--<a href="#" class="btn btn-success btn-sm" style="margin-top: -5px;">Copy Link</a>-->
+                </div>
+            </h6>
+        </div>
+    </div>
+    <hr>
+    {% endfor %}    
+</div>
+{% endblock %}

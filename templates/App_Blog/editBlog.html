@@ -1,0 +1,24 @@
+{% extends 'App_Blog/base.html' %}
+{% load crispy_forms_tags %}
+{% block page_title %}
+    Organic Blogger | Edit Blog
+{% endblock %}
+ 
+{% block body_content %}
+<div class="container" style="padding-top:20px; margin-top: 50px;">
+    <h1>Edit your Blog</h1>
+    {% if blog.author == user %}
+    <form action="{% url 'edit_blog' pk=blog.pk %}" method="post" enctype="multipart/form-data">
+        {{form|crispy}}
+        {% csrf_token %}
+        <button type="submit" class="btn btn-primary btn-sm">Update</button>
+    </form>
+    {% else %}
+    <div class="alert alert-danger">
+        Yor are not allowed to view/edit this blog!
+    </div>
+    {% endif %}
+</div>
+<br> 
+
+{% endblock %}

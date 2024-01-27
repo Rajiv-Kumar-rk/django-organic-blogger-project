@@ -1,0 +1,25 @@
+{% extends 'App_Blog/base.html' %}
+{% load crispy_forms_tags %}
+{% block page_title %}
+    Organic Blogger | Sign Up
+{% endblock %}
+
+{% block body_content %}
+<div class="container" style="padding-top:20px; margin-top: 50px;">
+    <h1>Sign Up Page</h1>
+{% if register_status %}
+    <div class="alert alert-success">
+        Registered Successfully! <a href="{% url 'login' %}">Login Now</a>
+    </div>
+{% else %}
+    <form action="{% url 'register' %}" method="post">
+        {{register_form|crispy}}
+        {% csrf_token %}
+        <button type="submit" class="btn btn-primary btn-sm">Register</button>
+    </form>
+    <br>
+    <small>Already have an Account? <a href="{% url 'login' %}">Login Now</a></small>
+{% endif %}
+</div>
+<br>
+{% endblock %}

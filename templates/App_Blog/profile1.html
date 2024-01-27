@@ -1,0 +1,45 @@
+{% extends 'App_Blog/base.html' %}
+{% load crispy_forms_tags %}
+{% block page_title %}
+    Organic Blogger | Profile
+{% endblock %}
+
+{% block body_content %}
+<div class="container" style="padding-top:20px;">
+    
+    <div class="row">
+        <div class="col-sm-4">
+            <center>
+                {% if user.user_profile %}
+                <img src="/media/{{user.user_profile.profile_pic}}" class="rounded-circle" width="140px">
+                <br><br>
+                <a href="{% url 'change_profile_picture' %}" class="btn btn-info btn-sm">Change Profile Picture</a>
+                <br>
+                {% else %}
+                <img src="/media/profile_pics/Default-Profile-Picture.png" class="rounded-circle" width="140px">
+                <br><br>
+                <a href="{% url 'add_profile_picture' %}" class="btn btn-info btn-sm">Add Profile Picture</a>
+                <br>
+                {% endif %}
+            </center>
+            
+        </div>
+
+        <div class="col-sm-8">
+            <h3>{{ user.username }} <a href="{% url 'update_profile' %}" class="btn btn-light">Edit Profile</a> </h3>
+            <h4>{{ user.blog_author.count }} Blogs &nbsp;&nbsp; 
+                {{ user.follower.count }} Followers &nbsp;&nbsp; 
+                {{ user.following.count }} Following &nbsp;&nbsp; 
+            </h4>
+            <br>
+            <h3>Rajiv Kumar</h3>
+            <h6>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. </h6>
+        </div>
+
+    </div>
+
+
+    <hr>
+
+</div>
+{% endblock %}

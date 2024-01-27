@@ -1,0 +1,160 @@
+{% extends 'App_Blog/base.html' %}
+{% load crispy_forms_tags %}
+{% load custom_filters %}
+{% block page_title %}
+    Organic Blogger | User Profile
+{% endblock %}
+
+{% block css_block %}
+<style>
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,body{
+width: 100%;
+overflow-x: hidden;
+}
+
+.row{
+    margin: 0px 0px;
+}
+
+.card{
+    width: 360px;
+    padding: 0px 12px;
+    margin: 10px 5px;
+    border: none;
+}
+
+.single-blog{
+    box-shadow: 0px 0px 20px 1px rgba(0,0,0,.2);
+    padding: 10px;
+    background-color: #fff;
+}
+
+.single-blog img{
+    width: 100%;
+}
+
+.blog-meta{
+    font-size: 14px;
+    margin-bottom: 2px;
+}
+
+.single-blog span{
+    float: right;
+    font-size: 16px;
+    color: cornflowerblue;
+}
+
+.blog-text{
+    font-size: 14px;
+    text-align: justify;
+}
+
+.single-blog h2{
+    margin-top: 10px;
+    font-size: 16px;
+    color: #007bff;
+}
+
+.single-blog h2 a{
+   text-decoration: none;
+}
+
+.read-more-btn{
+    background-image: linear-gradient(to right,#1c03b5,#5c8bef);
+    padding: 5px 12px 8px;
+    border-radius: 20px;
+    line-height: 20px;
+    font-size: 14px;
+    color: #fff;
+    text-decoration: none;
+    border: none !important;
+}
+
+.read-more-btn:hover{
+    background-image: linear-gradient(to right,#006417,#00b128);
+    text-decoration: none;
+    color: #fff;
+}
+</style>
+{% endblock %}
+
+{% block body_content %}
+<div class="container" style="padding-top:20px; margin-top: 50px;">
+    
+    <div class="row">
+        <div class="col-sm-4">
+            <center style="padding-top: 3%;">
+                {% if other_user_profile.user_profile.profile_pic %}
+                <img src="/media/{{other_user_profile.user_profile.profile_pic}}" class="rounded-circle" width="160px">
+                {% else %}
+                <img src="/media/profile_pics/Default-Profile-Picture.png" class="rounded-circle" width="160px">
+                {% endif %}
+            </center>
+            
+        </div>
+
+        <div class="col-sm-8">
+            <h3>{{ other_user_profile.username }}
+                {% if is_already_followed %} 
+                <a href="{% url 'unfollow' username=other_user_profile.username %}" class="btn btn-primary btn-sm">Unfollow</a>
+                {% else %}
+                <a href="{% url 'follow' username=other_user_profile.username %}" class="btn btn-primary btn-sm">Follow</a>
+                {% endif %}
+            </h3>
+            <h4>{{ other_user_profile.blog_author.count }} Blogs &nbsp;&nbsp; 
+                {{ other_user_profile.following.count }} Followers &nbsp;&nbsp; 
+                {{ other_user_profile.follower.count }} Following &nbsp;&nbsp; 
+            </h4>
+            <br>
+            <h3>{{other_user_profile.first_name}} {{other_user_profile.last_name}}</h3>
+            <h6>{{other_user_profile.user_profile.discription}}</h6>
+            {% if other_user_profile.user_profile.instagram_profile_link or other_user_profile.user_profile.facebook_profile_link or other_user_profile.user_profile.twitter_profile_link or other_user_profile.user_profile.linkedin_profile_link %}
+            <h5>Follow me on: 
+                 {% if other_user_profile.user_profile.instagram_profile_link %}
+                 <a href="{{ other_user_profile.user_profile.instagram_profile_link }}" target="_blank"><i class="fa-brands fa-instagram" title="Instagram"></i></a>
+                 {% endif %}
+
+                 {% if other_user_profile.user_profile.facebook_profile_link %}
+                 <a href="{{ other_user_profile.user_profile.facebook_profile_link }}" target="_blank"><i class="fa-brands fa-square-facebook" title="Facebook"></i></a> 
+                 {% endif %}
+
+                 {% if other_user_profile.user_profile.twitter_profile_link %}
+                 <a href="{{ other_user_profile.user_profile.twitter_profile_link }}" target="_blank"><i class="fa-brands fa-square-twitter" title="Twitter"></i></a> 
+                 {% endif %}
+
+                 {% if other_user_profile.user_profile.linkedin_profile_link %}
+                 <a href="{{ other_user_profile.user_profile.linkedin_profile_link }}" target="_blank"><i class="fa-brands fa-linkedin" title="LinkedIn"></i></a>
+                 {% endif %}
+            </h5>
+            {% endif %}
+        </div>
+
+    </div>
+    <hr>
+
+    <div class="row">
+        {% for blog in blogs %}
+        <div class="card col-md-4 col-xs-12 col-sm-12">
+            <div class="single-blog">
+                <p class="bolg-meta"><!--<a href="#"><i class="fa-solid fa-link" title="Copy Link"></i></a>--><span>{{ blog.publish_date|date }}</span></p>
+                <img src="/media/{{ blog.image }}" alt="{{ blog.title }}" style="margin-top: 10px;">
+                <h2><a href="{% url 'blog_details' slug=blog.slug %}">{{ blog.title }}</a></h2>
+                <p class="blog-text">{{ blog.content|card_content_range_filter|linebreaks }}</p>
+                <p><a href="{% url 'blog_details' slug=blog.slug %}" class="read-more-btn">Read More</a>
+                <span>{{ blog.like_on_blog.count }} Likes | {{ blog.comment_on_blog.count }} Comments</span>
+                </p>
+            </div>
+        </div> 
+        {% endfor %}
+    </div>
+
+
+</div>
+<br>
+{% endblock %}
